@@ -50,7 +50,7 @@ import java.util.*;
 
 public class MyClass {
 	public static void main(String[] args) {
-		List<Integer> xs = new LinkedList<Integer>(Arrays.asList(4, 8, 15, 16, 23, 42));
+		List<Integer> xs = new ArrayList<Integer>(Arrays.asList(4, 8, 15, 16, 23, 42));
 		System.out.println(Arrays.toString(xs.toArray()));  // [4, 8, 15, 16, 23, 42]
 	}
 }
@@ -164,6 +164,8 @@ As a thumb of rule, you **must** use lists whenever the number of items in it mi
 
 If you are dynamically populating your array, you should consider using lists, since you won't have to keep track of the index of the last item you put to your array (otherwise you wouldn't know where to put the next item); instead you'll simply say `myList.add()` to append a new item.
 
+`List<ElementType>` is the abstract type for lists, `ArrayList<ElementType>` and `LinkedList<ElementType>` are its (concrete) implementations. Prefer `ArrayList` over `LinkedList` if you are unsure.
+
 ### Converting Arrays and Lists to Each Other
 
 #### Array to List
@@ -173,9 +175,9 @@ import java.util.*;
 public class MyClass {
 	public static void main(String[] args) {
 		Integer[] myArray = new Integer[]{4, 8, 15, 16, 23, 42};
-		List<Integer> myList = new LinkedList<Integer>(Arrays.asList(myArray));
+		List<Integer> myList = new ArrayList<Integer>(Arrays.asList(myArray));
 		
-		System.out.println(Arrays.toString(myArray));           // [4, 8, 15, 16, 23, 42]
+		System.out.println(Arrays.toString(myArray));  // [4, 8, 15, 16, 23, 42]
 	}
 }
 ```
@@ -187,7 +189,7 @@ import java.util.*;
 public class MyClass {
 	public static void main(String[] args) {
 		Integer[] myArray = new Integer[]{4, 8, 15, 16, 23, 42};
-		List<Integer> myList = new LinkedList<Integer>(Arrays.asList(myArray));
+		List<Integer> myList = new ArrayList<Integer>(Arrays.asList(myArray));
 		
 		// Create an array of the same size as the list
 		Integer[] myArray2 = new Integer[myList.size()];
@@ -195,55 +197,155 @@ public class MyClass {
 		// Convert the list to the array
 		myList.toArray(myArray2);
 		
-		System.out.println(Arrays.toString(myArray2));
+		System.out.println(Arrays.toString(myArray2));  // [4, 8, 15, 16, 23, 42]
 	}
 }
 ```
 
+### Sorting
+#### Arrays
+```java
+import java.util.*;
 
-## Bad Practises
-1. Modifying a list you are iterating/looping over:
-
-   ```java
-	import java.util.*;
-
-	public class MyClass {
-		public static void main(String[] args) {
-			List<Integer> xs = new LinkedList<Integer>(Arrays.asList(4, 8, 15, 16, 23, 42));
-		
-			for (Integer x: xs) {
-				if (x % 2 == 0)
-					xs.add(x * 2);
-			}
-		
-			System.out.println(Arrays.toString(xs.toArray()));
-		}
+public class MyClass {
+	public static void main(String[] args) {
+		Integer[] xs = new Integer[]{8, 4, 16, 15, 42, 23};
+		System.out.println(Arrays.toString(xs));  // [8, 4, 16, 15, 42, 23]
+		Arrays.sort(xs);
+		System.out.println(Arrays.toString(xs));  // [4, 8, 15, 16, 23, 42]
 	}
-   ```
-   
-   If you need to modify the list you are iterating on, consider cloning it first and modifying the clone instead:
-   
-   ```java
-	import java.util.Arrays;
-	import java.util.LinkedList;
+}
+```
 
-	public class MyClass {
-		public static void main(String[] args) {
-			LinkedList<Integer> xs = new LinkedList<Integer>(Arrays.asList(4, 8, 15, 16, 23, 42));
-			LinkedList<Integer> xsClone = (LinkedList<Integer>) xs.clone();
-		
-			for (Integer x: xs) {
-				if (x % 2 == 0)
-					xsClone.add(x * 2);
-			}
-		
-			System.out.println(Arrays.toString(xs.toArray()));       // [4, 8, 15, 16, 23, 42]
-			System.out.println(Arrays.toString(xsClone.toArray()));  // [4, 8, 15, 16, 23, 42, 8, 16, 32, 84]
-		}
+#### Lists
+```java
+import java.util.*;
+
+public class MyClass {
+	public static void main(String[] args) {
+		List<Integer> xs = new ArrayList<Integer>(Arrays.asList(8, 4, 16, 15, 42, 23));
+		System.out.println(Arrays.toString(xs.toArray()));  // [8, 4, 16, 15, 42, 23]
+		Collections.sort(xs);
+		System.out.println(Arrays.toString(xs.toArray()));  // [4, 8, 15, 16, 23, 42]
 	}
-   ```
+}
+```
 
-## Good Practises
+### Reversing
+#### Arrays
+```java
+import java.util.*;
+
+public class MyClass {
+	public static void main(String[] args) {
+		int[] xs = new int[]{4, 8, 15, 16, 23, 42};
+		System.out.println(Arrays.toString(xs));  // [8, 4, 16, 15, 42, 23]
+		reverseArray(xs);
+		System.out.println(Arrays.toString(xs));  // [4, 8, 15, 16, 23, 42]
+	}
+	
+	// Source: https://stackoverflow.com/a/3523066/4466589
+	public static void reverseArray(int[] arr) {
+	    int left = 0;
+	    int right = arr.length - 1;
+
+	    while (left < right) {
+	        // Swap the values at the left and right indices
+	        int temp   = arr[left];
+	        arr[left]  = arr[right];
+	        arr[right] = temp;
+
+	        // Move the left and right index pointers in toward the center
+	        left++;
+	        right--;
+	    }
+	}
+}
+```
+
+#### Lists
+```java
+import java.util.*;
+
+public class MyClass {
+	public static void main(String[] args) {
+		List<Integer> xs = new ArrayList<Integer>(Arrays.asList(4, 8, 15, 16, 23, 42));
+		System.out.println(Arrays.toString(xs.toArray()));  // [4, 8, 15, 16, 23, 42]
+		Collections.reverse(xs);
+		System.out.println(Arrays.toString(xs.toArray()));  // [42, 23, 16, 15, 8, 4]
+	}
+}
+```
+
+## Maps
+Maps are objects which *map* each key to a single value.
+
+`Map<KeyType, ValueType>` is the abstract type, `HashMap<KeyType, ValueType>` is its (concrete) implementation.
+
+Beware that `HashMap` allows null keys and null values, but it is strongly advised that you do not use null keys and values.
+
+### Basic Usage
+```java
+import java.util.*;
+
+public class MyClass {
+	public static void main(String[] args) {
+		Map <String, Integer> studentIDs = new HashMap<String, Integer>();
+		studentIDs.put("robyn", 12345);
+		studentIDs.put("bora",  67890);
+		System.out.println(studentIDs.get("bora"));  // 67890
+	}
+}
+```
+
+### Usage as a Counter
+One common usage pattern of maps is to implement counters.
+
+```java
+import java.util.*;
+
+public class MyClass {
+	public static void main(String[] args) {
+		String[] xs = {"foo", "bar", "foo", "qux", "baz", "qux", "foo"};
+		Map <String, Integer> counter = new HashMap<String, Integer>();
+		
+		for (String x: xs) {
+			// The following line sets `count` to the value `arg` is mapped to
+			// if exists, else to zero.
+			int count = counter.getOrDefault(x, 0);
+			// Update the count of `arg`
+			counter.put(x, count + 1);
+		}
+		
+		System.out.println(counter);  // {bar=1, qux=2, foo=3, baz=1}
+		
+		String mp = mostPopular(counter);
+		System.out.printf("%s -> %d\n", mp, counter.get(mp));  // foo -> 3
+	}
+	
+	// Returns the first most popular (i.e. key that maps to the greatest
+	// integer) in a given counter.
+	// If counter is empty, returns null (hence should NOT be used with counters
+	// that contain a null key).
+	public static String mostPopular(Map<String, Integer> counter) {
+		if (counter.size() == 0)
+			return null;
+		
+		String[] keys = new String[counter.size()];
+		counter.keySet().toArray(keys);
+		
+		String maxKey = keys[0];
+		
+		for (String key: keys)
+			if (counter.get(key) > counter.get(maxKey))
+				maxKey = key;
+		
+		return maxKey;
+	}
+}
+```
+
+## Hints
 
 1. Check for extraordinary situations (`null` values, integers out of bounds, etc.) **at the very beginning** of your function, and return an error (usually `null`, or `false`) early.
 
@@ -265,6 +367,54 @@ public class MyClass {
 3. Do NOT write `else` statement after an `if` statement with return.
 
    Since the execution of the function stops after `return`, there is no need to make things more complicated with adding an `else` statement to the chain.
+
+4. Use `this` to while using instance variables and methods. Being more explicit will prevent errors such that accessing a static variable (which is shared amongst **all** instances of the class), or help you remind that you are in a static method.
+
+5. Do NOT modify a list or map you are iterating/looping over:
+
+   ```java
+	import java.util.*;
+
+	public class MyClass {
+		public static void main(String[] args) {
+			List<Integer> xs = new ArrayList<Integer>(Arrays.asList(4, 8, 15, 16, 23, 42));
+		
+			// WRONG!
+			for (Integer x: xs) {
+				if (x % 2 == 0)
+					xs.add(x * 2);
+			}
+		
+			System.out.println(Arrays.toString(xs.toArray()));
+		}
+	}
+   ```
+   
+   If you need to modify the object you are iterating on, consider cloning it first and modifying the clone instead:
+   
+   ```java
+	import java.util.Arrays;
+	import java.util.LinkedList;
+
+	public class MyClass {
+		public static void main(String[] args) {
+			List<Integer> xs = new ArrayList<Integer>(Arrays.asList(4, 8, 15, 16, 23, 42));
+			List<Integer> xsClone = (ArrayList<Integer>) xs.clone();
+		
+			for (Integer x: xs) {
+				if (x % 2 == 0)
+					xsClone.add(x * 2);
+			}
+		
+			System.out.println(Arrays.toString(xs.toArray()));       // [4, 8, 15, 16, 23, 42]
+			System.out.println(Arrays.toString(xsClone.toArray()));  // [4, 8, 15, 16, 23, 42, 8, 16, 32, 84]
+		}
+	}
+   ```
+
+6. Do NOT use `++` operator (*i.e. `variable++` or `++variable`), use `variable += 1` instead, except in the first line of for loops; same goes with `--` operator.
+
+
 
 ## Gotcha's!
 
