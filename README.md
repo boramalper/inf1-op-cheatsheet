@@ -334,7 +334,7 @@ public class MyClass {
 		String maxKey = null;
 
 		for (String key: counter.keySet())
-			if (counter.get(key) > counter.get(maxKey) || maxKey == null)
+			if (maxKey == null || counter.get(key) > counter.get(maxKey))
 				maxKey = key;
 
 		return maxKey;
