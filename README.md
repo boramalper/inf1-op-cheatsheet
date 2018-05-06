@@ -63,11 +63,11 @@ You can use `String.format()` to create formatted strings, when you are asked to
 public class Video {
 	String title;
 	boolean checkedOut = false;
-	
+
 	public String toString() {
 		// Manually
 		return "Video[title=\"" + this.title + "\", checkedOut=" + this.checkedOut + "]";
-		
+
 		// Using String.format
 		return String.format("Video[title=\"%s\", checkedOut=%s]", this.title, this.checkedOut);
 	}
@@ -101,7 +101,7 @@ Instead of using `System.out.println(String.format(...))` every single time, you
 - __Formatting Floating-Point Numbers with Custom Precision__
 
   You'll often want to format a floating-point number with custom precision, such as 3 digits after the decimal point. In that case:
-  
+
   ```java
   public class MyClass {
   	public static void main(String[] args) {
@@ -111,9 +111,9 @@ Instead of using `System.out.println(String.format(...))` every single time, you
   	}
   }
   ```
-  
+
   Notice the `.3` within the `%f`, which tells us to print __3__ digits after the decimal point.
- 
+
   Also beware that the number is rounded to `3.142` (instead of `3.141`).
 
 - __Comma Grouping__
@@ -126,9 +126,9 @@ Instead of using `System.out.println(String.format(...))` every single time, you
   	}
   }
   ```
-  
+
   Notice the `,` within the `%d`.
-  
+
 - __Padding:__
 
   ```java
@@ -143,9 +143,9 @@ Instead of using `System.out.println(String.format(...))` every single time, you
   	}
   }
   ```
-  
+
   will print
-  
+
   ```
      12 - Short
   00012 - Short (zero paddded)
@@ -155,7 +155,7 @@ Instead of using `System.out.println(String.format(...))` every single time, you
   ```
 
   Notice the `5` within the `%d`.
-  
+
   Also beware that when the result is longer than the padding (*e.g.* the case with `longNo`), it
   is formatted as before.
 
@@ -176,7 +176,7 @@ public class MyClass {
 	public static void main(String[] args) {
 		Integer[] myArray = new Integer[]{4, 8, 15, 16, 23, 42};
 		List<Integer> myList = new ArrayList<Integer>(Arrays.asList(myArray));
-		
+
 		System.out.println(Arrays.toString(myArray));  // [4, 8, 15, 16, 23, 42]
 	}
 }
@@ -190,13 +190,13 @@ public class MyClass {
 	public static void main(String[] args) {
 		Integer[] myArray = new Integer[]{4, 8, 15, 16, 23, 42};
 		List<Integer> myList = new ArrayList<Integer>(Arrays.asList(myArray));
-		
+
 		// Create an array of the same size as the list
 		Integer[] myArray2 = new Integer[myList.size()];
 
 		// Convert the list to the array
 		myList.toArray(myArray2);
-		
+
 		System.out.println(Arrays.toString(myArray2));  // [4, 8, 15, 16, 23, 42]
 	}
 }
@@ -243,7 +243,7 @@ public class MyClass {
 		reverseArray(xs);
 		System.out.println(Arrays.toString(xs));  // [4, 8, 15, 16, 23, 42]
 	}
-	
+
 	// Source: https://stackoverflow.com/a/3523066/4466589
 	public static void reverseArray(int[] arr) {
 	    int left = 0;
@@ -308,7 +308,7 @@ public class MyClass {
 	public static void main(String[] args) {
 		String[] xs = {"foo", "bar", "foo", "qux", "baz", "qux", "foo"};
 		Map <String, Integer> counter = new HashMap<String, Integer>();
-		
+
 		for (String x: xs) {
 			// The following line sets `count` to the value `arg` is mapped to
 			// if exists, else to zero.
@@ -316,30 +316,27 @@ public class MyClass {
 			// Update the count of `arg`
 			counter.put(x, count + 1);
 		}
-		
+
 		System.out.println(counter);  // {bar=1, qux=2, foo=3, baz=1}
-		
+
 		String mp = mostPopular(counter);
 		System.out.printf("%s -> %d\n", mp, counter.get(mp));  // foo -> 3
+
 	}
-	
+
 	// Returns the first most popular (i.e. key that maps to the greatest
 	// integer) in a given counter.
-	// If counter is empty, returns null (hence should NOT be used with counters
-	// that contain a null key).
+	// If counter is empty, returns null.
 	public static String mostPopular(Map<String, Integer> counter) {
-		if (counter.size() == 0)
+		if (counter == null || counter.size() == 0)
 			return null;
-		
-		String[] keys = new String[counter.size()];
-		counter.keySet().toArray(keys);
-		
-		String maxKey = keys[0];
-		
-		for (String key: keys)
-			if (counter.get(key) > counter.get(maxKey))
+
+		String maxKey = null;
+
+		for (String key: counter.keySet())
+			if (counter.get(key) > counter.get(maxKey) || maxKey == null)
 				maxKey = key;
-		
+
 		return maxKey;
 	}
 }
@@ -356,7 +353,7 @@ public class MyClass {
 			System.out.printf("%d should be between 1 and 5.\n", rating);
 			return false;
 		}
-		
+
 		...
 	}
    ```
@@ -378,20 +375,20 @@ public class MyClass {
 	public class MyClass {
 		public static void main(String[] args) {
 			List<Integer> xs = new ArrayList<Integer>(Arrays.asList(4, 8, 15, 16, 23, 42));
-		
+
 			// WRONG!
 			for (Integer x: xs) {
 				if (x % 2 == 0)
 					xs.add(x * 2);
 			}
-		
+
 			System.out.println(Arrays.toString(xs.toArray()));
 		}
 	}
    ```
-   
+
    If you need to modify the object you are iterating on, consider cloning it first and modifying the clone instead:
-   
+
    ```java
 	import java.util.Arrays;
 	import java.util.LinkedList;
@@ -400,12 +397,12 @@ public class MyClass {
 		public static void main(String[] args) {
 			List<Integer> xs = new ArrayList<Integer>(Arrays.asList(4, 8, 15, 16, 23, 42));
 			List<Integer> xsClone = (ArrayList<Integer>) xs.clone();
-		
+
 			for (Integer x: xs) {
 				if (x % 2 == 0)
 					xsClone.add(x * 2);
 			}
-		
+
 			System.out.println(Arrays.toString(xs.toArray()));       // [4, 8, 15, 16, 23, 42]
 			System.out.println(Arrays.toString(xsClone.toArray()));  // [4, 8, 15, 16, 23, 42, 8, 16, 32, 84]
 		}
@@ -443,7 +440,7 @@ public class MyClass {
 		modifyMyArray(numbers);
 		System.out.println(Arrays.toString(numbers));  // [4, 8, 15, 16, 23, 42]
 	}
-	
+
 	public static void modifyMyArray(int[] arr) {
 		arr[0] =  4;
 		arr[1] =  8;
