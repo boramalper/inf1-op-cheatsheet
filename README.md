@@ -291,7 +291,7 @@ import java.util.*;
 public class MyClass {
 	public static void main(String[] args) {
 		Map <String, Integer> studentIDs = new HashMap<String, Integer>();
-		studentIDs.put("robyn", 12345);
+		studentIDs.put("pedro", 12345);
 		studentIDs.put("bora",  67890);
 		System.out.println(studentIDs.get("bora"));  // 67890
 	}
